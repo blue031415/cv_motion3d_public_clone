@@ -127,6 +127,8 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
     ax2.set_xlabel('value')
     ax2.grid(True)
 
+    plt.colorbar(sc,pad=0.2)
+
     def update(frame):
         data = point_data[0:3,:,frame]
         sc._offsets3d = (data[0,:],data[1,:],data[2,:])
