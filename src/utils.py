@@ -86,7 +86,7 @@ def display_motion_score(path, x, y, save_path):
     def update(frame):
         data = point_data[0:3,:,frame]
         sc._offsets3d = (data[0,:],data[1,:],data[2,:])
-        if x[0]<=frame:
+        if x[0]<=frame and frame < x[-1]:
             line.set_data(x[0:frame-x[0]],y[0:frame-x[0]])
         ft.set_text(f"frame num {frame}")
         return sc, line
@@ -129,13 +129,14 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
     def update(frame):
         data = point_data[0:3,:,frame]
-        cb = contribution[frame]
-        norm = colors.Normalize(vmin=min(cb), vmax=max(cb))
         sc._offsets3d = (data[0,:],data[1,:],data[2,:])
-        sc.set_array(cb)
-        sc.set_norm(norm)
-        if x[0]<=frame:
-            line.set_data(x[0:frame-x[0]],y[0:frame-x[0]])
+        
+        if x[0]<=frame and frame < x[-1]:
+            line.set_data(x[0:frame-x[0]+1],y[0:frame-x[0]+1])
+            cb = contribution[frame-x[0]+1]
+            norm = colors.Normalize(vmin=min(cb), vmax=max(cb))
+            sc.set_array(cb)
+            sc.set_norm(norm)
         ft.set_text(f"frame num {frame}")
         return sc, line
 
