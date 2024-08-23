@@ -171,6 +171,14 @@ def gen_shape_difference_subspace(S1,S2,cfg):
     idx = np.where((1e-6 < eigen_val) & (eigen_val < 1))[0]
     return eigen_vec[:,idx]
 
+
+def gen_shape_principal_com_subspace(S1,S2,cfg):
+    G = S1 @ S1.T + S2 @ S2.T
+    eigen_val, eigen_vec = eig(G)
+    idx = np.where(1 <= eigen_val)[0]
+    return eigen_vec[:,idx]
+
+
 def cal_magnitude(S1,S2):
     _, S, _ = np.linalg.svd(S1.T @ S2)
     mag = np.sum(2*(1 - S))

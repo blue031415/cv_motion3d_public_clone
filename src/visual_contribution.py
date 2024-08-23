@@ -50,14 +50,6 @@ for i in range(num_frame-tau*2):
 
 display_motion_score_contribution(path,frame_list,mag_list,contribution_list, "../result/test.gif")
 
-    
-
-
-
-
-
-
-
 #display_motion_score(path,frame_list,mag_list, "../result/test.gif")
 
 
