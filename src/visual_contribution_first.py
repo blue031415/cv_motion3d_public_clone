@@ -4,6 +4,7 @@ from matplotlib.animation import FuncAnimation
 from config import Confing
 from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, display_motion_score,gram_schmidt,display_motion_score_contribution
 import numpy as np
+from tqdm import tqdm
 
 path = "../dataset/07_01.c3d"
 cfg = Confing()
@@ -11,6 +12,7 @@ tau = cfg.interval
 data = read_c3d(path)
 num_frame = data.shape[2]
 
+data_title = path.split('/')[2].split('.')[0]
 
 mag_list = []
 frame_list = []
@@ -19,7 +21,7 @@ f = tau // 2
 
 contribution_list = []
 
-for i in range(num_frame-tau*2):
+for i in tqdm(range(num_frame-tau*2)):
 
     S1 = gen_shape_subspace(data[:,:,i],cfg)
     S2 = gen_shape_subspace(data[:,:,i+tau],cfg)
@@ -48,8 +50,7 @@ for i in range(num_frame-tau*2):
 
     contribution_list.append(V)
 
-display_motion_score_contribution(path,frame_list,mag_list,contribution_list, "../result/test.gif")
+display_motion_score_contribution(path,frame_list,mag_list,contribution_list, f"../result/{data_title}_first.gif")
 
-#display_motion_score(path,frame_list,mag_list, "../result/test.gif")
 
 

@@ -5,7 +5,7 @@ from config import Confing
 from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, display_motion_score
 
 
-path = "../dataset/07_01.c3d"
+path = "../dataset/16_17.c3d"
 cfg = Confing()
 tau = cfg.interval
 data = read_c3d(path)

@@ -13,6 +13,7 @@ tau = cfg.interval
 data = read_c3d(path)
 num_frame = data.shape[2]
 
+data_title = path.split('/')[2].split('.')[0]
 
 mag_list = []
 frame_list = []
@@ -27,7 +28,6 @@ for i in range(num_frame-tau*2):
     S3 = gen_shape_subspace(data[:,:,i+tau*2],cfg)
 
     M = gen_shape_principal_com_subspace(S1,S3,cfg)
-
 
     D = gen_shape_difference_subspace(S2,M,cfg)
 
@@ -47,4 +47,4 @@ for i in range(num_frame-tau*2):
 
     contribution_list.append(V)
 
-display_motion_score_contribution(path,frame_list,mag_list,contribution_list, "../result/sd.gif")
+display_motion_score_contribution(path,frame_list,mag_list,contribution_list, f"../result/{data_title}_second.gif")
