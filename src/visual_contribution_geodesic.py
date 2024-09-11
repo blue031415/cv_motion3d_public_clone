@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 from config import Confing
 from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace
 from utils import gen_shape_principal_com_subspace,display_motion_score,gram_schmidt,display_motion_score_contribution
-from utils import along_geodesic, orth_decomposition_geodesic
+from utils import along_geodesic, orth_decomposition_geodesic,display_motion_some_score
 import numpy as np
 
 # コマンドライン引数からパスを取得
@@ -23,7 +23,8 @@ num_frame = data.shape[2]
 
 data_title = path.split('/')[2].split('.')[0]
 
-mag_list = []
+mag1_list = []
+mag2_list = []
 frame_list = []
 f = tau*2 // 2
 
@@ -35,16 +36,16 @@ for i in range(num_frame-tau*2):
     S2 = gen_shape_subspace(data[:,:,i+tau],cfg)
     S3 = gen_shape_subspace(data[:,:,i+tau*2],cfg)
 
-    
-    mag1 = orth_decomposition_geodesic(S1,S2,S3,cfg)
-    mag2 = along_geodesic(S1,S2,S3,cfg)
+    mag1 = along_geodesic(S1,S2,S3,cfg)    
+    mag2 = orth_decomposition_geodesic(S1,S2,S3,cfg)
 
-    mag_list.append(mag1)
+    mag1_list.append(mag1)
+    mag2_list.append(mag2)
 
     frame_list.append(f)
     f += 1
 
-    
+mag_list = [mag1_list, mag2_list]
 
 #display_motion_score_contribution(path,frame_list,mag_list,contribution_list, f"../result/{data_title}_geodestic.gif" )
-display_motion_score(path, frame_list,mag_list, f"../result/{data_title}_geodestic.gif")
+display_motion_some_score(path, frame_list, mag_list, f"../result/{data_title}_geodestic.gif")
