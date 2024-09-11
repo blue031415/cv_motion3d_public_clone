@@ -1,3 +1,4 @@
+import sys
 from ezc3d import c3d
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -6,7 +7,14 @@ from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference
 import numpy as np
 from tqdm import tqdm
 
-path = "../dataset/07_01.c3d"
+# コマンドライン引数からパスを取得
+if len(sys.argv) < 2:
+    print("Usage: python xxx.py [data_path]")
+    sys.exit(1)
+
+path = sys.argv[1]
+#path = "../dataset/07_01.c3d"
+
 cfg = Confing()
 tau = cfg.interval
 data = read_c3d(path)

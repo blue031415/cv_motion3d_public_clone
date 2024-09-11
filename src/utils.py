@@ -83,6 +83,7 @@ def display_motion_score(path, x, y, save_path):
     ax2.set_ylim(np.min(y),np.max(y))
     ax2.set_xlabel('frame')
     ax2.set_xlabel('value')
+    ax2.set_title(title)
     ax2.grid(True)
 
     def update(frame):
@@ -95,7 +96,7 @@ def display_motion_score(path, x, y, save_path):
 
     ani = FuncAnimation(fig, update, frames=num_frame, interval=50, blit=False)
 
-    plt.show()
+    #plt.show()
     ani.save(save_path, writer='pillow', fps=20)
 
 
@@ -155,7 +156,7 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
     ani = FuncAnimation(fig, update, frames=num_frame, interval=50, blit=False)
 
-    plt.show()
+    #plt.show()
     ani.save(save_path, writer='pillow', fps=20)
 
 
