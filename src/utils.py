@@ -162,11 +162,13 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
 
 #複数の波形を表示する
-def display_motion_some_score(path, x, y, save_path):
+def display_motion_some_score(path, x, y, y_label, save_path):
 
     # yはarray
     #y[0] 値1
     #y[1] 値2
+    #y_label[0] 値1のラベル
+    #y_label[1] 値2のラベル
 
     title = path.split('/')[2]
 
@@ -191,8 +193,8 @@ def display_motion_some_score(path, x, y, save_path):
 
     ax2 = fig.add_subplot(122)
     line = []
-    for _ in range(len(y)):
-        line.append(ax2.plot([], []))
+    for i in range(len(y)):
+        line.append(ax2.plot([], [], label=y_label[i]))
 
     ax2.set_xlim(np.min(x),np.max(x))
     ax2.set_ylim(np.min(y),np.max(y))
@@ -208,15 +210,13 @@ def display_motion_some_score(path, x, y, save_path):
         if x[0]<=frame and frame < x[-1]:
             for i in range(len(y)):
                 line[i][0].set_data(x[0:frame-x[0]+1],y[i][0:frame-x[0]+1])
-            
-            
         ft.set_text(f"frame num {frame}")
         
         return sc, line
 
     ani = FuncAnimation(fig, update, frames=num_frame, interval=50, blit=False)
-
-    plt.show()
+    plt.legend()
+    #plt.show()
     ani.save(save_path, writer='pillow', fps=20)
 
 
