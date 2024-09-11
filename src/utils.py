@@ -211,7 +211,31 @@ def gram_schmidt(arr):
         q = np.append(q, qi, axis=1)
     return q
 
+#D(M, S2')の大きさが２階差分部分空間の測地線に沿った変動成分１
+def along_geodesic(S1,S2,S3,cfg):
+    #６次元の和空間W(S1,S3)を作成
+    W = np.concatenate([S1, S3], 1)
 
+    #部分空間S2の３本の基底を６次元の和空間W(S1,S3)に射影する
+    P = W @ W.T
+    V = P @ S2
+
+    #射影された3本の基底に対してグラムシュミット直交化を適用してV:(S2’)を求める
+    #射影した基底ベクトルを正規化
+    V = V / np.linalg.norm(V, axis=0)
+    #グラムシュミット直交化
+    V = gram_schmidt(V)
+
+    #Mをもとめる
+    M = gen_shape_principal_com_subspace(S1,S3,cfg)
+
+    #変動成分：D(M, S2')の大きさが２階差分部分空間の測地線に沿った変動成分１
+    mag = cal_magnitude(M,V)
+
+    return mag
+
+
+#D(S2, S2')の大きさが２階差分部分空間の測地線に直交する変動成分２
 def orth_decomposition_geodesic(S1,S2,S3,cfg):
     #６次元の和空間W(S1,S3)を作成
     W = np.concatenate([S1, S3], 1)
@@ -230,6 +254,9 @@ def orth_decomposition_geodesic(S1,S2,S3,cfg):
     mag = cal_magnitude(S2,V)
 
     return mag
+
+
+
 
 
 

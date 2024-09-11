@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 from config import Confing
 from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace
 from utils import gen_shape_principal_com_subspace,display_motion_score,gram_schmidt,display_motion_score_contribution
-from utils import orth_decomposition_geodesic
+from utils import along_geodesic, orth_decomposition_geodesic
 import numpy as np
 
 # コマンドライン引数からパスを取得
@@ -35,10 +35,12 @@ for i in range(num_frame-tau*2):
     S2 = gen_shape_subspace(data[:,:,i+tau],cfg)
     S3 = gen_shape_subspace(data[:,:,i+tau*2],cfg)
 
-
     
-    mag = orth_decomposition_geodesic(S1,S2,S3,cfg)
-    mag_list.append(mag)
+    mag1 = orth_decomposition_geodesic(S1,S2,S3,cfg)
+    mag2 = along_geodesic(S1,S2,S3,cfg)
+
+    mag_list.append(mag1)
+
     frame_list.append(f)
     f += 1
 
