@@ -274,6 +274,8 @@ def gram_schmidt(arr):
 def along_geodesic(S1,S2,S3,cfg):
     #６次元の和空間W(S1,S3)を作成
     W = np.concatenate([S1, S3], 1)
+    W = W / np.linalg.norm(W, axis=0)
+    W = gram_schmidt(W)
 
     #部分空間S2の３本の基底を６次元の和空間W(S1,S3)に射影する
     P = W @ W.T
@@ -298,6 +300,8 @@ def along_geodesic(S1,S2,S3,cfg):
 def orth_decomposition_geodesic(S1,S2,S3,cfg):
     #６次元の和空間W(S1,S3)を作成
     W = np.concatenate([S1, S3], 1)
+    W = W / np.linalg.norm(W, axis=0)
+    W = gram_schmidt(W)
 
     #部分空間S2の３本の基底を６次元の和空間W(S1,S3)に射影する
     P = W @ W.T
