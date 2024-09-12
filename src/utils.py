@@ -321,8 +321,6 @@ def orth_decomposition_geodesic(S1,S2,S3,cfg):
 
 
 
-
-
 if __name__ == "__main__": 
     S1 = np.array([[1,2,3],[1,2,3],[1,2,3]])
     S2 = np.array([[4,5,6],[4,5,6],[4,5,6]])

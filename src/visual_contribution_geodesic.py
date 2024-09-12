@@ -46,6 +46,6 @@ for i in range(num_frame-tau*2):
     f += 1
 
 mag_list = [mag1_list, mag2_list]
-mag_list_label = ["along deodesic", "orth_deodesic"]
+mag_list_label = ["along geodesic", "orth_geodesic"]
 
 display_motion_some_score(path, frame_list, mag_list, mag_list_label, f"../result/{data_title}_geodestic.gif")
