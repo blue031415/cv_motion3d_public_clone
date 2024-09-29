@@ -3,7 +3,8 @@ from ezc3d import c3d
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from config import Confing
-from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, display_motion_score,gram_schmidt,display_motion_score_contribution
+from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, display_motion_score,gram_schmidt
+from util.display import display_motion_score_contribution
 import numpy as np
 from tqdm import tqdm
 

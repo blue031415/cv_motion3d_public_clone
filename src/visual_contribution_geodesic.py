@@ -5,7 +5,8 @@ from matplotlib.animation import FuncAnimation
 from config import Confing
 from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace
 from utils import gen_shape_principal_com_subspace,display_motion_score,gram_schmidt,display_motion_score_contribution
-from utils import along_geodesic, orth_decomposition_geodesic,display_motion_some_score
+from utils import along_geodesic, orth_decomposition_geodesic
+from util.display import display_motion_some_score
 import numpy as np
 
 # コマンドライン引数からパスを取得
@@ -46,6 +47,6 @@ for i in range(num_frame-tau*2):
     f += 1
 
 mag_list = [mag1_list, mag2_list]
-mag_list_label = ["along geodesic", "orth_geodesic"]
+mag_list_label = ["along geodesic", "orth to geodesic"]
 
 display_motion_some_score(path, frame_list, mag_list, mag_list_label, f"../result/{data_title}_geodestic.gif")
