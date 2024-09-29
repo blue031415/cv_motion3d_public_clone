@@ -7,6 +7,40 @@ from config import Confing
 import scipy
 from matplotlib import colors
 
+
+def display_motion(path):
+    c = c3d(path)
+    point_data = c['data']['points'] #(XYZ1, num_mark, num_frame)
+    num_frame = point_data.shape[2]
+    data = point_data[0:3,:,0]
+    
+
+    x_range = np.nanmax(point_data[0,:,:]) - np.nanmin(point_data[0,:,:])
+    y_range = np.nanmax(point_data[1,:,:]) - np.nanmin(point_data[1,:,:])
+    z_range = np.nanmax(point_data[2,:,:]) - np.nanmin(point_data[2,:,:])
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    sc = ax.scatter(data[0,:],data[1,:],data[2,:], s=5)
+    ft = ax.set_title(f"frame num {0}")
+
+    ax.set_box_aspect([x_range, y_range, z_range])
+    ax.set_xlim(np.nanmin(point_data[0,:,:]),np.nanmax(point_data[0,:,:]))
+    ax.set_ylim(np.nanmin(point_data[1,:,:]),np.nanmax(point_data[1,:,:]))
+    ax.set_zlim(np.nanmin(point_data[2,:,:]),np.nanmax(point_data[2,:,:]))
+
+    def update(frame):
+        data = point_data[0:3,:,frame]
+        sc._offsets3d = (data[0,:],data[1,:],data[2,:])
+        ft.set_text(f"frame num {frame}")
+        return sc
+
+    ani = FuncAnimation(fig, update, frames=num_frame, interval=50, blit=False)
+
+    plt.show()
+
+
+
 def display_motion_score(path, x, y, save_path):
     c = c3d(path)
     point_data = c['data']['points'] #(XYZ1, num_mark, num_frame)

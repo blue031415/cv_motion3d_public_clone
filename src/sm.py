@@ -2,8 +2,8 @@ from ezc3d import c3d
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from config import Confing
-from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, display_motion_score
-
+from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace
+from util.display import display_motion_score
 
 path = "../dataset/01_01.c3d"
 cfg = Confing()
