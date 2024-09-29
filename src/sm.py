@@ -5,7 +5,7 @@ from config import Confing
 from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, display_motion_score
 
 
-path = "../dataset/16_17.c3d"
+path = "../dataset/01_01.c3d"
 cfg = Confing()
 tau = cfg.interval
 data = read_c3d(path)
@@ -18,8 +18,11 @@ f = tau // 2
 
 for i in range(num_frame-tau*2):
 
+
     S1 = gen_shape_subspace(data[:,:,i],cfg)
     S2 = gen_shape_subspace(data[:,:,i+tau],cfg)
+
+    
 
     mag = cal_magnitude(S1,S2)
     mag_list.append(mag)

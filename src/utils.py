@@ -29,10 +29,11 @@ def display_motion(path):
     point_data = c['data']['points'] #(XYZ1, num_mark, num_frame)
     num_frame = point_data.shape[2]
     data = point_data[0:3,:,0]
+    
 
-    x_range = np.max(point_data[0,:,:]) - np.min(point_data[0,:,:])
-    y_range = np.max(point_data[1,:,:]) - np.min(point_data[1,:,:])
-    z_range = np.max(point_data[2,:,:]) - np.min(point_data[2,:,:])
+    x_range = np.nanmax(point_data[0,:,:]) - np.nanmin(point_data[0,:,:])
+    y_range = np.nanmax(point_data[1,:,:]) - np.nanmin(point_data[1,:,:])
+    z_range = np.nanmax(point_data[2,:,:]) - np.nanmin(point_data[2,:,:])
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -40,9 +41,9 @@ def display_motion(path):
     ft = ax.set_title(f"frame num {0}")
 
     ax.set_box_aspect([x_range, y_range, z_range])
-    ax.set_xlim(np.min(point_data[0,:,:]),np.max(point_data[0,:,:]))
-    ax.set_ylim(np.min(point_data[1,:,:]),np.max(point_data[1,:,:]))
-    ax.set_zlim(np.min(point_data[2,:,:]),np.max(point_data[2,:,:]))
+    ax.set_xlim(np.nanmin(point_data[0,:,:]),np.nanmax(point_data[0,:,:]))
+    ax.set_ylim(np.nanmin(point_data[1,:,:]),np.nanmax(point_data[1,:,:]))
+    ax.set_zlim(np.nanmin(point_data[2,:,:]),np.nanmax(point_data[2,:,:]))
 
     def update(frame):
         data = point_data[0:3,:,frame]
@@ -58,6 +59,7 @@ def display_motion(path):
 def display_motion_score(path, x, y, save_path):
     c = c3d(path)
     point_data = c['data']['points'] #(XYZ1, num_mark, num_frame)
+    point_data = np.nan_to_num(point_data)
     num_frame = point_data.shape[2]
     data = point_data[0:3,:,0]
 
@@ -106,6 +108,9 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
     c = c3d(path)
     point_data = c['data']['points'] #(XYZ1, num_mark, num_frame)
+    point_data = np.nan_to_num(point_data)
+
+
     num_frame = point_data.shape[2]
     data = point_data[0:3,:,0]
     cb = contribution[0]
@@ -220,20 +225,51 @@ def display_motion_some_score(path, x, y, y_label, save_path):
     ani.save(save_path, writer='pillow', fps=20)
 
 
+#収束のエラーが出た場合の特異値分解計算
+def error_cal_svd(A):
+    
+    w,v = scipy.linalg.eigh(np.dot(A.T ,A))
+    
+    w = w[::-1]
+    w[w < 0] = 0
+    v = v[:,::-1]
+    
+    Y = np.sqrt(w) #Y:特異値
+    X = np.dot(A,v) #X:左特異ベクトル行列
+
+    epsilon = 0  # ゼロとみなす小さな値の閾値
+    Y_inv = np.where(Y > epsilon, 1.0 / Y, 0)
+    
+    X = np.dot(X,np.diag(Y_inv)) #
+    Z = v.T #Z:右特異ベクトルの転置行列
+
+    return X, Y, Z
+
+
+#収束エラーを考慮した特異値分解
+def cal_svd(A):
+    try:
+        U, S, V = np.linalg.svd(A)
+        return U,S,V
+    except:
+        U, S, V  = error_cal_svd(A)
+        return U,S,V
+
 
 #1frame内のポイントデータから形状部分空間を作成する。
 def gen_shape_subspace(data, cfg):
     #data shape is (3, num)
-    X = data.T
+    X = np.nan_to_num(data.T)
+    
     mv = np.mean(X, axis=0)
     Xc = X - mv
-    U, S, V = np.linalg.svd(Xc)
+    U, S, V = cal_svd(Xc)
 
     return U[:,0:cfg.subspace_dim]
 
 #差分部分空間の生成
 def gen_shape_difference_subspace(S1,S2,cfg):
-    # U, S, Vt = np.linalg.svd(S1.T @ S2)
+    # U, S, Vt = cal_svd(S1.T @ S2)
     # S = np.diag(S)
     # I = np.eye(S.shape[0],S.shape[1])
     # D = ((S1 @ U) - (S2 @ Vt.T)) @ ((2 * (I - S))**(-0.5))
@@ -251,7 +287,7 @@ def gen_shape_principal_com_subspace(S1,S2,cfg):
 
 #部分空間同士のマグニチュード(類似度)を計算
 def cal_magnitude(S1,S2):
-    _, S, _ = np.linalg.svd(S1.T @ S2)
+    _, S, _ = cal_svd(S1.T @ S2)
     mag = np.sum(2*(1 - S))
     return mag
 
@@ -323,12 +359,14 @@ def orth_decomposition_geodesic(S1,S2,S3,cfg):
 
 if __name__ == "__main__": 
     S1 = np.array([[1,2,3],[1,2,3],[1,2,3]])
-    S2 = np.array([[4,5,6],[4,5,6],[4,5,6]])
-    print(S1)
-    print(S2)
 
-    W = np.concatenate([S1, S2], 1)
-    print(W)
+
+    U,S,V = np.linalg.svd(S1)
+    print(S)
+    U,S,V = error_cal_svd(S1)
+    print(S)
+    U,S,V = cal_svd(S1)
+    print(S)
 
 
 
