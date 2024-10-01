@@ -3,7 +3,7 @@ from ezc3d import c3d
 from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from config import Confing
-from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, display_motion_score,gram_schmidt
+from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace, gram_schmidt
 from util.display import display_motion_score_contribution
 import numpy as np
 from tqdm import tqdm
@@ -18,7 +18,7 @@ path = sys.argv[1]
 
 cfg = Confing()
 tau = cfg.interval
-data = read_c3d(path)
+data = read_c3d(path) #data shape is (3, 41, frame_num)
 num_frame = data.shape[2]
 
 data_title = path.split('/')[2].split('.')[0]

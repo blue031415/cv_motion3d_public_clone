@@ -30,11 +30,5 @@ for i in range(num_frame-tau*2):
     f += 1
 
 display_motion_score(path,frame_list,mag_list, "../result/test.gif")
-# plt.figure(figsize=(10,4))
-# plt.plot(frame_list, mag_list)
-# plt.xlabel('frame')
-# plt.ylabel('mag')
-# plt.grid(True)
-# plt.show()
-#plt.savefig(save_path)
+
 
