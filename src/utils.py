@@ -60,7 +60,7 @@ def cal_svd(A):
 #1frame内のポイントデータから形状部分空間を作成する。
 def gen_shape_subspace(data, cfg):
     #data shape is (3, num)
-    X = np.nan_to_num(data.T)
+    X = data.T
     
     mv = np.mean(X, axis=0)
     Xc = X - mv

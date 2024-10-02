@@ -6,6 +6,7 @@ from scipy.linalg import eig
 from config import Confing
 import scipy
 from matplotlib import colors
+from util.preprocess import remove_nan
 
 
 def display_motion(path):
@@ -94,7 +95,8 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
     c = c3d(path)
     point_data = c['data']['points'] #(XYZ1, num_mark, num_frame)
-    point_data = np.nan_to_num(point_data)
+    point_data = point_data[0:3,:,:]
+    point_data = remove_nan(point_data)
 
 
     num_frame = point_data.shape[2]
@@ -172,6 +174,9 @@ def display_motion_some_score(path, x, y, y_label, save_path):
 
     c = c3d(path)
     point_data = c['data']['points'] #(XYZ1, num_mark, num_frame)
+    point_data = point_data[0:3,:,:]
+    point_data = remove_nan(point_data)
+    
     num_frame = point_data.shape[2]
     data = point_data[0:3,:,0]
 

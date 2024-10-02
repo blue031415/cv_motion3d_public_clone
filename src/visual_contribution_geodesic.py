@@ -4,10 +4,13 @@ from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 from config import Confing
 from utils import read_c3d,gen_shape_subspace,cal_magnitude,gen_shape_difference_subspace
-from utils import gen_shape_principal_com_subspace,gram_schmidt,display_motion_score_contribution
+from utils import gen_shape_principal_com_subspace,gram_schmidt
 from utils import along_geodesic, orth_decomposition_geodesic
 from util.display import display_motion_some_score
+from util.preprocess import remove_nan
 import numpy as np
+from tqdm import tqdm
+
 
 # コマンドライン引数からパスを取得
 if len(sys.argv) < 2:
@@ -20,6 +23,7 @@ path = sys.argv[1]
 cfg = Confing()
 tau = cfg.interval
 data = read_c3d(path)
+data = remove_nan(data)
 num_frame = data.shape[2]
 
 data_title = path.split('/')[2].split('.')[0]
@@ -31,7 +35,10 @@ f = tau*2 // 2
 
 contribution_list = []
 
-for i in range(num_frame-tau*2):
+for i in tqdm(range(num_frame-tau*2)):
+
+    if np.isnan(data[:,:,i]).any() or np.isinf(data[:,:,i]).any():
+        print("A contains NaN or inf values")
 
     S1 = gen_shape_subspace(data[:,:,i],cfg)
     S2 = gen_shape_subspace(data[:,:,i+tau],cfg)
