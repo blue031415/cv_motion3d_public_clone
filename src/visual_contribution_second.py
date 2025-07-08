@@ -53,18 +53,37 @@ for i in tqdm(range(num_frame - tau * 2)):
     P = D @ D.T
     V = P @ S2
 
-    V = V / np.linalg.norm(V, axis=0)
-    V = gram_schmidt(V)
+    if np.isnan(V).any():
+        print("V has NoN")
+        exit(1)
 
-    V = np.square(V)
-    V = np.sum(V, axis=1)
+    if np.isinf(V).any():
+        print("V has Inf")
+        exit(1)
 
-    mag = cal_magnitude(S2, M)
-    mag_list.append(mag)
-    frame_list.append(f)
-    f += 1
+    norm = np.linalg.norm(V, axis=0)
+    if np.any(norm == 0):
+        # print(V)
+        # print("norm is zero!!")
 
-    contribution_list.append(V)
+        mag_list.append(0)
+        frame_list.append(f)
+        f += 1
+        V = np.sum(V, axis=1)
+        contribution_list.append(V.real)
+    else:
+        V = V / norm
+        V = gram_schmidt(V)
+
+        V = np.square(V)
+        V = np.sum(V, axis=1)
+
+        mag = cal_magnitude(S2, M)
+        mag_list.append(mag)
+        frame_list.append(f)
+        f += 1
+
+        contribution_list.append(V)
 
 display_motion_score_contribution(
     path, frame_list, mag_list, contribution_list, f"../result/{data_title}_second.gif"

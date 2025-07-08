@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 # from matplotlib.animation import FuncAnimation
 import numpy as np
 from scipy.linalg import eig
+from numpy.linalg import LinAlgError
 
 # from config import Config
 import scipy
@@ -55,7 +56,7 @@ def cal_svd(A):
     try:
         U, S, V = np.linalg.svd(A)
         return U, S, V
-    except:
+    except LinAlgError:
         U, S, V = error_cal_svd(A)
         return U, S, V
 
@@ -111,6 +112,24 @@ def gram_schmidt(arr):
             u -= np.dot(q[:, i], arr[:, j]) * q[:, [i]]
         qi = u / scipy.linalg.norm(u)
         q = np.append(q, qi, axis=1)
+    # arr = np.array(arr, dtype=np.float64)
+    # k = arr.shape[1]
+    # u = arr[:, [0]]
+    # norm_u = scipy.linalg.norm(u)
+    # if norm_u < 1e-8:
+    #     return np.zeros_like(arr)  # or handle appropriately
+    # q = u / norm_u
+
+    # for j in range(1, k):
+    #     u = arr[:, [j]]
+    #     for i in range(j):
+    #         u -= np.dot(q[:, i], arr[:, j]) * q[:, [i]]
+    #     norm_u = scipy.linalg.norm(u)
+    #     if norm_u < 1e-8:
+    #         qi = np.zeros_like(u)
+    #     else:
+    #         qi = u / norm_u
+    #     q = np.append(q, qi, axis=1)
     return q
 
 

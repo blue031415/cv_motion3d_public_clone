@@ -14,4 +14,5 @@ class Config:
             "16_12": "walk, veer left",
             "16_17": "walk, 90-degree left turn",
             "16_57": "run/jog, sudden stop",
+            "000004_000103_75_236_R_003_972": "Baseball Hitting",
         }
