@@ -9,7 +9,6 @@ from matplotlib import pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 # from scipy.linalg import eig
-from config import Config
 from util.preprocess import remove_nan
 
 
@@ -90,7 +89,7 @@ def display_motion_score(path, x, y, save_path):
 
 
 def display_motion_score_contribution(path, x, y, contribution, save_path):
-    config = Config()
+    # config = Config()
     title = os.path.basename(path)
 
     c = c3d(path)
@@ -109,7 +108,8 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
     fig = plt.figure(figsize=(11, 5))
 
-    fig.suptitle(f"{config.motion_description[title.split('.')[0]]} ({title})")
+    # fig.suptitle(f"{config.motion_description[title.split('.')[0]]} ({title})")
+    fig.suptitle(f"({title})")
     gs = fig.add_gridspec(9, 11)
     ax1 = fig.add_subplot(gs[1:9, 0:7], projection="3d")
 
@@ -158,7 +158,7 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
 # 複数の波形を表示する
 def display_motion_some_score(path, x, y, y_label, save_path):
-    cfg = Config()
+    # cfg = Config()
 
     # yはarray
     # y[0] 値1
@@ -181,7 +181,8 @@ def display_motion_some_score(path, x, y, y_label, save_path):
     z_range = np.max(point_data[2, :, :]) - np.min(point_data[2, :, :])
 
     fig = plt.figure(figsize=(11, 5))
-    fig.suptitle(f"{cfg.motion_description[title.split('.')[0]]} ({title})")
+    # fig.suptitle(f"{cfg.motion_description[title.split('.')[0]]} ({title})")
+    fig.suptitle(f"({title})")
     gs = fig.add_gridspec(9, 11)
     ax1 = fig.add_subplot(gs[0:9, 0:6], projection="3d")
 
