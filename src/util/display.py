@@ -1,13 +1,15 @@
-from ezc3d import c3d
-from matplotlib import pyplot as plt
-from matplotlib.animation import FuncAnimation
-import numpy as np
+import os
 
-# from scipy.linalg import eig
-from config import Config
+import numpy as np
+from ezc3d import c3d
 
 # import scipy
 from matplotlib import colors
+from matplotlib import pyplot as plt
+from matplotlib.animation import FuncAnimation
+
+# from scipy.linalg import eig
+from config import Config
 from util.preprocess import remove_nan
 
 
@@ -37,7 +39,7 @@ def display_motion(path):
         ft.set_text(f"frame num {frame}")
         return sc
 
-    ani = FuncAnimation(fig, update, frames=num_frame, interval=50, blit=False)
+    FuncAnimation(fig, update, frames=num_frame, interval=50, blit=False)
 
     plt.show()
 
@@ -49,7 +51,7 @@ def display_motion_score(path, x, y, save_path):
     num_frame = point_data.shape[2]
     data = point_data[0:3, :, 0]
 
-    title = path.split("/")[2]
+    title = os.path.basename(path)
 
     x_range = np.max(point_data[0, :, :]) - np.min(point_data[0, :, :])
     y_range = np.max(point_data[1, :, :]) - np.min(point_data[1, :, :])
@@ -89,7 +91,7 @@ def display_motion_score(path, x, y, save_path):
 
 def display_motion_score_contribution(path, x, y, contribution, save_path):
     config = Config()
-    title = path.split("/")[2]
+    title = os.path.basename(path)
 
     c = c3d(path)
     point_data = c["data"]["points"]  # (XYZ1, num_mark, num_frame)
@@ -127,9 +129,7 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
     ax2.set_ylim(np.min(y), np.max(y))
     ax2.set_xlabel("frame")
     ax2.set_ylabel("value")
-    ax2.set_title(
-        f"Dissimilarity of {save_path.split('/')[2].split('_')[2].split('.')[0]} DS"
-    )
+    ax2.set_title(f"Dissimilarity of {os.path.splitext(os.path.basename(path))[0]} DS")
     ax2.grid(True)
 
     cbar = plt.colorbar(sc, pad=0.2)
@@ -158,7 +158,6 @@ def display_motion_score_contribution(path, x, y, contribution, save_path):
 
 # 複数の波形を表示する
 def display_motion_some_score(path, x, y, y_label, save_path):
-
     cfg = Config()
 
     # yはarray
@@ -167,7 +166,7 @@ def display_motion_some_score(path, x, y, y_label, save_path):
     # y_label[0] 値1のラベル
     # y_label[1] 値2のラベル
 
-    title = path.split("/")[2]
+    title = os.path.basename(path)
 
     c = c3d(path)
     point_data = c["data"]["points"]  # (XYZ1, num_mark, num_frame)
@@ -204,9 +203,7 @@ def display_motion_some_score(path, x, y, y_label, save_path):
     ax2.set_ylim(np.min(y), np.max(y))
     ax2.set_xlabel("frame")
     ax2.set_ylabel("value")
-    ax2.set_title(
-        f"Dissimilarity of {save_path.split('/')[2].split('_')[2].split('.')[0]} DS"
-    )
+    ax2.set_title(f"Dissimilarity of {os.path.splitext(os.path.basename(path))[0]} DS")
     ax2.grid(True)
 
     def update(frame):

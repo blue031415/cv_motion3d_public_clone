@@ -1,20 +1,22 @@
+import os
 import sys
+
+import numpy as np
+from tqdm import tqdm
 
 # from ezc3d import c3d
 # from matplotlib import pyplot as plt
 # from matplotlib.animation import FuncAnimation
 from config import Config
-from utils import (
-    read_c3d,
-    gen_shape_subspace,
-    cal_magnitude,
-    gen_shape_difference_subspace,
-    gram_schmidt,
-)
 from util.display import display_motion_score_contribution
 from util.preprocess import remove_nan
-import numpy as np
-from tqdm import tqdm
+from utils import (
+    cal_magnitude,
+    gen_shape_difference_subspace,
+    gen_shape_subspace,
+    gram_schmidt,
+    read_c3d,
+)
 
 # コマンドライン引数からパスを取得
 if len(sys.argv) < 2:
@@ -30,7 +32,7 @@ data = read_c3d(path)  # data shape is (3, 41, frame_num)
 data = remove_nan(data)
 num_frame = data.shape[2]
 
-data_title = path.split("/")[2].split(".")[0]
+data_title = os.path.splitext(os.path.basename(path))[0]
 
 mag_list = []
 frame_list = []
@@ -40,7 +42,6 @@ f = tau // 2
 contribution_list = []
 
 for i in tqdm(range(num_frame - tau * 2)):
-
     if np.isnan(data[:, :, i]).any() or np.isinf(data[:, :, i]).any():
         print("A contains NaN or inf values")
 

@@ -1,7 +1,8 @@
-from ezc3d import c3d
 import numpy as np
+from ezc3d import c3d
 
 
+# データにNaNとinfを含むかどうかのチェック
 def check_nan_inf_in_c3d(path):
     c = c3d(path)
     point_data = c["data"]["points"]  # shape: (4, num_markers, num_frames)

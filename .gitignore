@@ -1,2 +1,5 @@
 .venv
-src\util\__pycache__
+result
+src/__pycache__
+src/util/__pycache__
+dataset/OpenBiomechanics

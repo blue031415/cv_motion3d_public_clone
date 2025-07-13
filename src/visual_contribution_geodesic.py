@@ -1,23 +1,25 @@
+import os
 import sys
+
+import numpy as np
+from tqdm import tqdm
 
 # from ezc3d import c3d
 # from matplotlib import pyplot as plt
 # from matplotlib.animation import FuncAnimation
 from config import Config
+from util.display import display_motion_some_score
+from util.preprocess import remove_nan
+
+# from utils import gen_shape_principal_com_subspace, gram_schmidt
 from utils import (
-    read_c3d,
+    along_geodesic,
     gen_shape_subspace,
     # cal_magnitude,
     # gen_shape_difference_subspace,
+    orth_decomposition_geodesic,
+    read_c3d,
 )
-
-# from utils import gen_shape_principal_com_subspace, gram_schmidt
-from utils import along_geodesic, orth_decomposition_geodesic
-from util.display import display_motion_some_score
-from util.preprocess import remove_nan
-import numpy as np
-from tqdm import tqdm
-
 
 # コマンドライン引数からパスを取得
 if len(sys.argv) < 2:
@@ -33,7 +35,7 @@ data = read_c3d(path)
 data = remove_nan(data)
 num_frame = data.shape[2]
 
-data_title = path.split("/")[2].split(".")[0]
+data_title = os.path.splitext(os.path.basename(path))[0]
 
 mag1_list = []
 mag2_list = []
@@ -43,7 +45,6 @@ f = tau * 2 // 2
 contribution_list = []
 
 for i in tqdm(range(num_frame - tau * 2)):
-
     if np.isnan(data[:, :, i]).any() or np.isinf(data[:, :, i]).any():
         print("A contains NaN or inf values")
 
